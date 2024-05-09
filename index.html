@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vite + Vue</title>
+  </head>
+  <body>
+    <div id="app"></div>
+    <script type="module" src="/src/main.js"></script>
+    <script>
+      /* Rem 核心实现 */
+      (function (doc, win) {
+        var docEl = doc.documentElement;
+        var clientWidth = docEl.clientWidth;
+        var resizeEvt =
+          'orientationchange' in win ? 'orientationchange' : 'resize';
+        var recalc = function () {
+          if (clientWidth === undefined) return;
+          docEl.style.fontSize = 100 * (clientWidth / 375) + 'px';
+        };
+        if (doc.addEventListener === undefined) return;
+        win.addEventListener(resizeEvt, recalc, false);
+        doc.addEventListener('DOMContentLoaded', recalc, false);
+      })(document, window);
+    </script>
+  </body>
+</html>
