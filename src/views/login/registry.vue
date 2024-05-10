@@ -9,6 +9,7 @@ const formObj = reactive({
   password: '',
   phoneNum: '',
 });
+
 const onSubmit = () => {
   const params = {
     username: formObj.username,
@@ -45,6 +46,7 @@ const onSubmit = () => {
       <van-cell-group inset>
         <van-field
           v-model="formObj.username"
+          autocomplete="off"
           name="用户名"
           label="用户名"
           placeholder="用户名"
@@ -52,6 +54,7 @@ const onSubmit = () => {
         />
         <van-field
           v-model="formObj.phoneNum"
+          autocomplete="off"
           type="number"
           name="手机号码"
           label="手机号码"
@@ -60,6 +63,7 @@ const onSubmit = () => {
         />
         <van-field
           v-model="formObj.password"
+          autocomplete="off"
           type="password"
           name="密码"
           label="密码"

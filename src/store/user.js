@@ -1,8 +1,11 @@
 import { defineStore } from 'pinia';
+import { getRouterList } from '@/api/base.js';
+// import { router } from "@/router";
 export const useUserStore = defineStore('user', {  
   state: () => ({  
     token: '',
-    userInfo:{}
+    userInfo: {},
+    asyncRouter:null
   }),  
   actions: {  
     setToken(newValue) {  
@@ -10,6 +13,15 @@ export const useUserStore = defineStore('user', {
     },
     setUserInfo(newValue) {
       this.userInfo = newValue;
+    },
+    resetState() {
+      this.token = '';
+      this.userInfo = {};
+    },
+    getAsyncRouter() {
+      getRouterList().then(res => {
+        console.log('getRouterList',res)
+      })
     }
   },
   persist: {

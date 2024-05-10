@@ -55,6 +55,7 @@ const registry = () => {
         /> -->
         <van-field
           v-model="formObj.phoneNum"
+          autocomplete="off"
           name="手机号"
           label="手机号"
           placeholder="请输入手机号"
@@ -62,6 +63,7 @@ const registry = () => {
         />
         <van-field
           v-model="formObj.password"
+          autocomplete="off"
           type="password"
           name="密码"
           label="密码"
