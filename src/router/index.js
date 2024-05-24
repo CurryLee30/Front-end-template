@@ -1,23 +1,46 @@
 // index.js  
-import { createRouter, createWebHistory } from 'vue-router'  
-import routes from './routes'  
-// import { useUserStore } from '@/store/user.js';
-// const userStore = useUserStore();
-const router = createRouter({  
+import { createRouter, createWebHistory } from 'vue-router';
+import routes from './routes';
+import { useUserStore } from '@/store/user';
+import { routerHandle } from '@/utils/routerHandle.js';
+const router = createRouter({
   history: createWebHistory(),
-  routes  
-})  
+  routes
+})
 
+// 检查是否存在于免登陆白名单
+function inWhiteList(toPath) {
+  const myRouter = router.getRoutes();
+  const authList = myRouter.map(item => {
+    return item.path
+  });
+  if (authList.includes(toPath)) {
+    return true
+  } 
+}
 
-// router.beforeEach((to, from, next) => {  
-//   const requiresAuth = to.matched.some(record => record.meta.requiresAuth);  
-//   if (requiresAuth && !userStore.token) { // 如果用户未登录且尝试访问需要认证的路由，则重定向到登录页 
-//     next('/login');  
-//   } else {  
-//     next(); // 确保一定要调用 next() 方法来 resolve 这个钩子  
-//   }  
-// });
- 
+router.beforeEach(async (to, from, next) => {
+  const userStore = useUserStore();
+  const toPath = to.path;
+  const _token = userStore.token;
+  if (inWhiteList(toPath)) {
+    next();
+  } else {
+    if (_token) {
+      if (userStore.isRefresh) { //是否刷新页面   
+        userStore.setIsRefresh(false)
+        routerHandle(userStore.asyncRouter);
+        next({...to,replace:true});    
+      } else {
+        next('/404')
+      }
+      
+    } else {
+      next('/login');
+    }
+  }
+});
+
 
 
 

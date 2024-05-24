@@ -14,32 +14,15 @@ const onSubmit = () => {
   const params = {
     phoneNum: formObj.phoneNum,
     password: cryptoJS.SHA256(formObj.password).toString(),
-  }
-  login(params).then((res) => {
-    const { successed, message, token,data } = res;  // Bearer
-    // const _token = 'Bearer ' + token
-    if (successed) {
-      userStore.setToken(token);
-      userStore.setUserInfo(data);
-      showToast({
-        type: 'success',
-        message: message,
-        duration: 1000,
-        onClose: () => {
-          router.push({
-            name: 'Layout',
-          });
-        },
-      });
-    }
-  });
+  };
+  userStore.login(params);
 };
 
 const registry = () => {
   router.push({
-    name: 'Registry'
-  })
-}
+    name: 'Registry',
+  });
+};
 </script>
 
 <template>
@@ -75,7 +58,14 @@ const registry = () => {
         <van-button round block type="primary" native-type="submit">
           登录
         </van-button>
-        <van-button style="margin-top:0.2rem;" plain round block type="primary" @click="registry">
+        <van-button
+          style="margin-top: 0.2rem"
+          plain
+          round
+          block
+          type="primary"
+          @click="registry"
+        >
           注册
         </van-button>
       </div>
