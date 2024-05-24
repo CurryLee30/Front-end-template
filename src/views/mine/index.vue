@@ -1,10 +1,10 @@
 <script setup>
-import { useUserStore } from "@/store/user.js";
 import { useRouter } from 'vue-router';
+import { useUserStore } from "@/store/user.js";
 import { logOut } from "@/api/base.js";
+const router = useRouter();
 const userStore = useUserStore();
 const userInfo = userStore.userInfo;
-const router = useRouter();
 const exit = () => {
   logOut().then(res => {
     const { successed,message } = res
@@ -54,10 +54,14 @@ const exit = () => {
 
 <style lang="scss" scoped>
 .container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
   .portrait {
     display: flex;
-    align-items: center;
+    // align-items: center;
     margin: 0.2rem;
+    flex:1;
     .right {
       flex: 1;
       margin-left: 0.2rem;
@@ -73,7 +77,7 @@ const exit = () => {
     }
   }
   .exit {
-    margin-top: 1rem;
+    margin-bottom: 0.6rem;
     padding: 0.3rem;
     box-sizing: border-box;
   }

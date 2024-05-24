@@ -1,8 +1,6 @@
 import axios from "axios";
 import { useUserStore } from '@/store/user.js';
 import router from '@/router';
-const userStore = useUserStore();
-
 const isPro = import.meta.env.MODE === 'production';
 // import store from '@/store';
 
@@ -20,14 +18,15 @@ export const Service = axios.create({
   },
 });
 const err = error => {
+  const userStore = useUserStore();
   closeToast();
   if (error.response) {  
     const status = error.response.data?.code || error.response.status;
     const errMessage = error.response.data?.message || error.response.statusText
-    console.log("error666", error);
+    // console.log("error666", error);
     showNotify({ type: 'danger', message: `${status} ${errMessage}!` });
     if (status == '401') { //token失效，重新登录获取
-      userStore.setToken('');
+      userStore.resetState();
       router.push({
         name:"Login"
       })
@@ -45,7 +44,8 @@ Service.interceptors.request.use(
       message: "加载中...",
       forbidClick: true,
     }); 
-    console.log("config1111", config);
+    // console.log("config1111", config);
+    const userStore = useUserStore();
     const token = userStore.token;
     if (token) {
       config.headers['Authorization'] = token;
@@ -61,7 +61,7 @@ Service.interceptors.response.use(
   (response) => {
     //移动端
     closeToast();
-    console.log('response', response)
+    // console.log('response', response)
     if (response.status === 200) { 
       
       // const { code } = response.data
