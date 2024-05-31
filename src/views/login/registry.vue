@@ -1,22 +1,51 @@
 <script setup>
 import { reactive } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
-import { registry, getUersList } from '@/api/base.js';
+import { registry } from '@/api/authDog/user';
+// import { registry, getUersList } from '@/api/base.js';
+import { generateUniqueId } from '@/utils/common.js';
 import cryptoJS from 'crypto-js';
+import { datePickerProps } from 'vant';
 const router = useRouter();
 const formObj = reactive({
-  username: '',
+  username: '', //用户名只能包含字母和数字并以字母开头
   password: '',
-  phoneNum: '',
+  phoneNum: '',//密码长度必须在8-16位之间
 });
 
 const onSubmit = () => {
-  const params = {
-    username: formObj.username,
-    password: cryptoJS.SHA256(formObj.password).toString(),
-    phoneNum: formObj.phoneNum
+  // const params = {
+  //   username: formObj.username,
+  //   password: cryptoJS.SHA256(formObj.password).toString(),
+  //   phoneNum: formObj.phoneNum
+  // }
+  const bodyData = {
+    baseBody: {
+      "timestamp": Date.now(),
+      "clientVersion": "V1.0.0",
+      "deviceId": generateUniqueId(20),
+      // "deviceId": "fa6a91ef9baa242de0b354a212e8cf83",
+      // "osType": "android",
+      // "brand": "XIAOMI",
+      // "model": "MI13"
+    },
+    name: formObj.username,
+    password:formObj.password,
+    mobile: formObj.phoneNum,   
   }
-  registry(params).then((res) => {
+  const authdogParams = {
+    appid: 3,
+    data:JSON.stringify({
+      name: formObj.username,
+      password:formObj.password,
+      mobile: formObj.phoneNum,
+      deviceId: generateUniqueId(30)
+    }) 
+    
+  }
+  // const paramsStr = JSON.stringify(authdogParams);
+  // console.log('paramsStr1111111',paramsStr)
+  registry(authdogParams).then((res) => {
     console.log('res', res);
     const { code, successed, message } = res;
     if (successed) {

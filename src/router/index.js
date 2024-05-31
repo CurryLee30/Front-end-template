@@ -10,8 +10,8 @@ const router = createRouter({
 
 // 检查是否存在于免登陆白名单
 function inWhiteList(toPath) {
-  const myRouter = router.getRoutes();
-  const authList = myRouter.map(item => {
+  const getRouters = router.getRoutes();
+  const authList = getRouters.map(item => {
     return item.path
   });
   if (authList.includes(toPath)) {
@@ -40,10 +40,4 @@ router.beforeEach(async (to, from, next) => {
     }
   }
 });
-
-
-
-
-
-
 export default router;
